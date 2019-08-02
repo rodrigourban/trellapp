@@ -1,0 +1,103 @@
+@import "./scrollbars";
+@include scrollbars(.5em, rgba(0,0,0,0.2));
+
+* {
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+  margin: 0;
+  overflow:auto;
+}
+#app {
+  height: 100%;
+  background-image: url('bg.jpg');
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+.navbar {
+  height: 32px;
+  background-color: rgba(1,1,1,0.7);
+  display: flex;
+  justify-content: center;
+  .navbar-middle{
+    padding-top: 2px;
+    font-size: 1.5rem;
+  }
+}
+.main{
+  overflow: auto;
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+  height:100%;
+}
+.board {
+  display: flex;
+}
+
+.listContainer{
+  margin-top: 15px;
+  margin-left: 5px;
+  width: 272px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  &.list{
+    background-color: #dfe1e6;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    .list-title {
+      font-weight: 400;
+      margin-top: 10px;
+      margin-left: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .taskList{
+    height: auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(245,222,179,0.5);
+    .footer {
+      padding: 5px;
+      &:hover{
+        background-color: rgba(245,222,179,0.8);
+      }
+    }
+  }
+  .listBox{
+    width: 272px;
+    background: wheat;
+    background-color: rgba(1,1,1,0.3);
+    border-radius: 5px;
+    padding: 7px;
+    &:hover{
+      background-color: rgba(1,1,1,0.4)
+    }
+    &.listAdd{
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+    .addButton {
+    }
+  }
+  .addBox{
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 5px;
+    padding: 3px;
+    width: 100%;
+    .addInput {
+      width: 100%;
+    }
+    
+  }
+  
+}
+

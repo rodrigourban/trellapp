@@ -1,0 +1,53 @@
+{
+  "name": "trellapp",
+  "version": "1.0.0",
+  "description": "-A trello copy made with React",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigourban/trellapp.git"
+  },
+  "keywords": [
+    "react",
+    "trello",
+    "app",
+    "frontend",
+    "javascript",
+    "reactjs"
+  ],
+  "author": "Rodrigo Urban",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rodrigourban/trellapp/issues"
+  },
+  "homepage": "https://github.com/rodrigourban/trellapp#readme",
+  "dependencies": {
+    "node-sass": "^4.12.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.5",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.1.0",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.4",
+    "redux-devtools": "^3.5.0",
+    "redux-thunk": "^2.3.0",
+    "sass-loader": "^7.1.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.37.0",
+    "webpack-cli": "^3.3.6"
+  }
+}
