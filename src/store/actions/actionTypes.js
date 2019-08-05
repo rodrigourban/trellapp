@@ -8,3 +8,5 @@ export const GET_TASKS = 'GET_TASKS'
 export const DELETE_TASK = 'DELETE_TASK'
 export const SWAP_TASK = 'SWAP_TASK'
 
+export const OPEN_MODAL = 'OPEN_MODAL'
+export const CLOSE_MODAL = 'CLOSE_MODAL'

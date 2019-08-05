@@ -1,9 +1,9 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <div className="navbar-middle">Trellapp</div>
+      <Link to="/" className="navbar-middle">Trellapp</Link>
     </nav>
   )
 }

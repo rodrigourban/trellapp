@@ -4,7 +4,23 @@ import { updateObj } from '../helper'
 const initialState = {
   isAddingList: false,
   isAddingTask: false,
+  modal: false,
   lists: [],
+}
+
+const openModal = (state, action) => {
+  return updateObj(
+    state, {
+      modal: true
+    }
+  )
+}
+const closeModal = (state, action) => {
+  return updateObj(
+    state, {
+      modal: false
+    }
+  )
 }
 
 const getLists = (state, action) => {
@@ -85,6 +101,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.DELETE_LIST: return deleteList(state, action);
     case actionTypes.CREATE_TASK: return createTask(state, action);
     case actionTypes.DELETE_TASK: return deleteTask(state, action);
+    case actionTypes.OPEN_MODAL: return openModal(state, action);
+    case actionTypes.CLOSE_MODAL: return closeModal(state, action);
     default: return state;
   }
 }
