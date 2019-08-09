@@ -1,6 +1,8 @@
 import React from 'react';
 import NewCard from './NewCard'
 import Editable from '../hoc/Editable';
+import axios from 'axios';
+
 class List extends React.Component {
   state = {
     value: "",
@@ -19,8 +21,8 @@ class List extends React.Component {
   onCreateCard = (value) => {
     this.props.createTask(this.props.id, value)
   }
-  onDelete = (listID, taskID) => {
-    this.props.deleteTask(listID, taskID)
+  onDelete = (taskID) => {
+    this.props.deleteTask(taskID)
   }
   onDeleteList = (listID) => {
     this.props.deleteList(listID)
@@ -53,8 +55,18 @@ class List extends React.Component {
     const EditTitle = Editable('div')
     return (
       <div className="listContainer list" draggable onDragStart={(e) => this.onDragStart(e, this.props.id)} onDragEnd={this.onDragEnd} onDragOver={this.onDragOver(this.props.id)}>
-        <div className="list-title" ><EditTitle className="text" value={this.props.title} listID={this.props.id}></EditTitle><button className="button" onClick={() => this.onDeleteList(this.props.id)}>...</button></div>
-        <div className="list-content">{this.props.content.map(task => (<li className="task" key={task.id}><EditTitle value={task.title} listID={this.props.id} taskID={task.id}></EditTitle><button onClick={() => this.onDelete(this.props.id, task.id)}>...</button></li>))}</div>
+        <div className="list-title" ><EditTitle className="text" value={this.props.title} listID={this.props.id} boardID={this.props.board}></EditTitle><button className="button" onClick={() => this.onDeleteList(this.props.id)}>...</button></div>
+        <div className="list-content">
+          {this.props.content.map(task =>
+            (<li className="task"
+              key={task.id}>
+              <EditTitle
+                value={task.title}
+                listID={this.props.id}
+                taskID={task.id} />
+              <button onClick={() => this.onDelete(task.id)}>...</button>
+            </li>))}
+        </div>
         <NewCard styles="listAdd" isAdding={this.state.isAdding} title="Add a card" onToggle={this.onToggle} onAdd={this.onCreateCard}></NewCard>
       </div>
     )

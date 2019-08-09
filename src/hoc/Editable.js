@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../store/actions/actions'
+import * as apiActions from '../store/actions/api'
 const editable = (WrappedComponent) => {
   class Editable extends React.Component {
     state = {
@@ -28,9 +28,9 @@ const editable = (WrappedComponent) => {
       }, () => {
         if (this.isValueChanged()) {
           if (this.props.taskID) {
-            this.props.onUpdateTask(this.props.listID, this.domElm.textContent, this.props.taskID)
+            this.props.onUpdateTask(this.props.listID, { title: this.domElm.textContent, task_list: this.props.listID }, this.props.taskID)
           } else {
-            this.props.onUpdateList(this.domElm.textContent, this.props.listID)
+            this.props.onUpdateList(this.props.boardID, { title: this.domElm.textContent, board: this.props.boardID }, this.props.listID)
           }
         }
       })
@@ -81,8 +81,8 @@ const editable = (WrappedComponent) => {
 
   const mapDistpatchToProps = (dispatch) => {
     return {
-      onUpdateList: (value, listID) => dispatch(actions.createList(value, listID)),
-      onUpdateTask: (listID, value, taskID) => dispatch(actions.createTask(listID, value, taskID))
+      onUpdateList: (boardID, value, listID) => dispatch(apiActions.createList(boardID, value, listID)),
+      onUpdateTask: (listID, value, taskID) => dispatch(apiActions.createTask(listID, value, taskID))
     }
   }
 
