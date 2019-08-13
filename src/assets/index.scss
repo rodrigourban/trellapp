@@ -11,20 +11,27 @@ body {
 }
 #app {
   height: 100%;
-  background-image: url('bg.jpg');
-  background-position: center;
-  background-size: cover;
+  font-family: 'Roboto', sans-serif;
+  // background-image: url('bg.jpg');
+  // background-position: center;
+  // background-size: cover;
+  background-color: rgba(255,255,255,1);
   display: flex;
   flex-direction: column;
 }
 .navbar {
-  height: 32px;
-  background-color: rgba(1,1,1,0.7);
+  height: 40px;
+  background-color: rgb(2, 106, 167);
+  padding: 4px;
   display: flex;
   justify-content: center;
   .navbar-middle{
-    padding-top: 2px;
+    font-family: 'Dancing Script', cursive;
+    height: 30px;
     font-size: 1.5rem;
+    color: rgba(255,255,255,5);
+    text-decoration: none;
+    font-weight: '700';
   }
 }
 .main{

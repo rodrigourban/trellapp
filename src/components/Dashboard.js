@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as modalActions from '../store/actions/modal';
 import axios from 'axios';
@@ -40,27 +40,28 @@ class Dashboard extends React.Component {
   render() {
     const content = this.state.boards.map((board) => {
       return (
-        <div className="dashboard-board" style={{
-          height: '100px', backgroundColor: board.background, borderRadius: '5px', padding: '5px'
+        <NavLink to={`/board/${board.id}`} className="dashboard-board" style={{
+          height: '100px', backgroundColor: board.background, borderRadius: '5px',
+          padding: '5px', textDecoration: 'none', color: '#fffff'
         }}>
-          <div className="dashboard-board-title" style={{ position: 'relative', top: '5px', left: '2px' }
+          <div className="dashboard-board-title" style={{ position: 'relative', top: '10px', left: '2px' }
           }>
-            <Link to={`/board/${board.id}`}>{board.title}</Link>
+            <div style={{ fontSize: '16px', lineHeight: '20px', color: '#fffff', fontWeight: '700', color: 'rgb(255,255,255)' }}>{board.title}</div>
           </div>
-          <button onClick={() => this.deleteBoard(board.id)}>delete</button>
-        </div >
+          {/* <button onClick={() => this.deleteBoard(board.id)}>delete</button> */}
+        </NavLink >
       )
     })
     return (
-      <div className="dashboard" >
-        <div className="dashboard-title">Personal Boards</div>
+      <div className="dashboard" style={{ width: '90%', marginLeft: '1.5rem', marginTop: '1rem' }}>
+        <div className="dashboard-title">[Aca va el icono de mierda] Personal Boards</div>
         <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', columnGap: '10px', rowGap: '10px' }}>
           {content}
-          <div style={{ backgroundColor: 'transparent' }}>
-            <div onClick={this.openModal} style={{ position: 'relative', top: '1px', left: '2px' }}>Create new board</div>
+          <div style={{ backgroundColor: 'transparent', margin: 'auto' }} onClick={this.openModal}>
+            Create new board
           </div>
         </div>
-      </div>
+      </div >
     )
   }
 }

@@ -58,14 +58,15 @@ class List extends React.Component {
         <div className="list-title" ><EditTitle className="text" value={this.props.title} listID={this.props.id} boardID={this.props.board}></EditTitle><button className="button" onClick={() => this.onDeleteList(this.props.id)}>...</button></div>
         <div className="list-content">
           {this.props.content.map(task =>
-            (<li className="task"
+            (<div className="task" style={{ padding: '6px 8px 2px', backgroundColor: 'rgb(255,255,255)', boxShadow: 'rgba(9, 30, 66, 0.25) 1px 1px 0px', margin: '8px', borderRadius: '3px' }}
               key={task.id}>
               <EditTitle
                 value={task.title}
                 listID={this.props.id}
-                taskID={task.id} />
-              <button onClick={() => this.onDelete(task.id)}>...</button>
-            </li>))}
+                taskID={task.id}
+              />
+              {/* <button onClick={() => this.onDelete(task.id)} style={{ width: '30px' }}>...</button> */}
+            </div>))}
         </div>
         <NewCard styles="listAdd" isAdding={this.state.isAdding} title="Add a card" onToggle={this.onToggle} onAdd={this.onCreateCard}></NewCard>
       </div>
