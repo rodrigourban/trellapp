@@ -2,9 +2,11 @@ import React from 'react';
 import List from './List';
 import NewCard from './NewCard'
 import { connect } from 'react-redux'
-import * as modalActions from '../store/actions/modal'
 import * as apiActions from '../store/actions/api'
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import axios from 'axios'
+
 
 class Board extends React.Component {
 
@@ -53,6 +55,16 @@ class Board extends React.Component {
     this.props.onDeleteTask(listID, taskID)
     this.loadData()
   }
+  sortItems = (firstItem, secondItem, tasklistID) => {
+    axios.post('http://localhost:8000/api/tasks/reorder', { firstID: firstItem, secondID: secondItem, tasklistID: tasklistID })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    this.loadData()
+  }
   render() {
     const currentList = this.props.lista.map((el) => (
       <List className="list"
@@ -64,14 +76,17 @@ class Board extends React.Component {
         createTask={this.onCreateTask}
         deleteTask={this.onDeleteTask}
         deleteList={this.onDeleteList}
+        sortItems={this.sortItems}
       />
     ))
     return (
       <div className="board" >
-        {currentList}
-        <div className="listContainer" >
-          <NewCard isAdding={this.state.isAdding} title="Add a list" onToggle={this.onToggle} onAdd={this.onCreateList}></NewCard>
-        </div>
+        <DndProvider backend={HTML5Backend}>
+          {currentList}
+          <div className="listContainer" >
+            <NewCard isAdding={this.state.isAdding} title="Add a list" onToggle={this.onToggle} onAdd={this.onCreateList}></NewCard>
+          </div>
+        </DndProvider>
       </div >
     )
   }

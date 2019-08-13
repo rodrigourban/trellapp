@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as modalActions from '../store/actions/modal';
 import axios from 'axios';
+import logo from '../assets/Boards.png'
 
 class Dashboard extends React.Component {
   state = {
@@ -54,7 +55,7 @@ class Dashboard extends React.Component {
     })
     return (
       <div className="dashboard" style={{ width: '90%', marginLeft: '1.5rem', marginTop: '1rem' }}>
-        <div className="dashboard-title">[Aca va el icono de mierda] Personal Boards</div>
+        <div className="dashboard-title" style={{ marginBottom: '5px', padding: '5px', lineHeight: '25px' }}><img src={logo} height="25" width="25" style={{ marginRight: '5px', verticalAlign: 'bottom' }} />Personal Boards</div>
         <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto', columnGap: '10px', rowGap: '10px' }}>
           {content}
           <div style={{ backgroundColor: 'transparent', margin: 'auto' }} onClick={this.openModal}>
