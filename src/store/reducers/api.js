@@ -47,34 +47,7 @@ const getListsSuccess = (state, action) => {
     }
   )
 }
-const createList = (state, action) => {
-  if (action.listID) {
-    axios.put(`http://localhost:8000/api/tasklists/${action.listID}`, action.payload)
-      .then(res => {
-        console.log("actualizado exitosamente")
-      })
-      .catch(err => console.log(err))
-  } else {
-    axios.post('http://localhost:8000/api/tasklists/', { title: action.payload, board: action.boardID })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-  return state
-}
-const deleteList = (state, action) => {
-  axios.delete(`http://localhost:8000/api/tasklists/${action.listID}`)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  return state
-}
+
 
 const swapLists = (state, action) => {
   return updateObj(
@@ -86,23 +59,7 @@ const swapLists = (state, action) => {
 
 const createTask = (state, action) => {
   console.log(action)
-  if (action.taskID) {
-    axios.put(`http://localhost:8000/api/tasks/${action.taskID}`, action.payload)
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  } else {
-    axios.post('http://localhost:8000/api/tasks/', { title: action.payload, task_list: action.listID })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+
   return state
 }
 const deleteTask = (state, action) => {
@@ -122,11 +79,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.CREATE_BOARD: return createBoard(state, action);
     case actionTypes.DELETE_BOARD: return deleteBoard(state, action);
     case actionTypes.GET_LISTS_SUCESS: return getListsSuccess(state, action);
-    case actionTypes.CREATE_LIST: return createList(state, action);
-    case actionTypes.UPDATE_LIST: return updateList(state, action);
-    case actionTypes.DELETE_LIST: return deleteList(state, action);
-    case actionTypes.CREATE_TASK: return createTask(state, action);
-    case actionTypes.DELETE_TASK: return deleteTask(state, action);
     default: return state;
   }
 }

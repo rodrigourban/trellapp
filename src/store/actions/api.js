@@ -1,6 +1,29 @@
 import * as action from './actionTypes'
 import axios from 'axios'
 
+
+export const swapList = (firstID, secondID) => {
+  return dispatch => {
+
+  }
+}
+
+export const swapTask = (boardID, tasklistID, firstID, secondID = null) => {
+  return dispatch => {
+    console.log(boardID, tasklistID, firstID, secondID)
+    axios.post('http://localhost:8000/api/tasks/reorder', { firstID: firstID, secondID: secondID, tasklistID: tasklistID })
+      .then(res => {
+        console.log(res)
+        dispatch(getLists(boardID))
+      })
+      .catch(err => {
+        console.log(err)
+        dispatch(getLists(boardID))
+      })
+  }
+}
+
+
 export const getBoards = () => {
   return {
     type: action.GET_BOARDS
@@ -41,41 +64,68 @@ export const getListsSuccess = (lists) => {
 }
 
 
-export const createList = (boardID, payload, listID = null) => {
-  return {
-    type: action.CREATE_LIST,
-    payload: payload,
-    boardID: boardID,
-    listID: listID
+export const deleteList = (boardID, listID) => {
+  return dispatch => {
+    axios.delete(`http://localhost:8000/api/tasklists/${listID}`)
+      .then(res => {
+        dispatch(getLists(boardID))
+      })
+      .catch(err => {
+        dispatch(getLists(boardID))
+      })
+    return state
   }
 }
 
-export const deleteList = (id) => {
-  return {
-    type: action.DELETE_LIST,
-    listID: id,
+export const createTask = (boardID, listID, payload, taskID = null) => {
+  return dispatch => {
+    if (taskID) {
+      axios.put(`http://localhost:8000/api/tasks/${taskID}`, payload)
+        .then(res => {
+          console.log(res)
+          dispatch(getLists(boardID))
+        })
+        .catch(err => {
+          console.log(err)
+          dispatch(getLists(boardID))
+        })
+    } else {
+      axios.post('http://localhost:8000/api/tasks/', { title: payload, task_list: listID })
+        .then(res => {
+          console.log(res)
+          dispatch(getLists(boardID))
+        })
+        .catch(err => {
+          console.log(err)
+          dispatch(getLists(boardID))
+        })
+    }
   }
 }
 
-export const getTasks = (listID) => {
-  return {
-    type: action.GET_TASKS,
-    listID: listID
-  }
-}
-
-export const createTask = (listID, payload, taskID = null) => {
-  return {
-    type: action.CREATE_TASK,
-    listID: listID,
-    payload: payload,
-    taskID: taskID
-  }
-}
-
-export const deleteTask = (taskID) => {
+export const deleteTask = (boardID, taskID) => {
   return {
     type: action.DELETE_TASK,
     taskID: taskID
+  }
+}
+
+export const createList = (boardID, payload, listID = null) => {
+  return dispatch => {
+    if (listID) {
+      axios.put(`http://localhost:8000/api/tasklists/${listID}`, payload)
+        .then(res => {
+          dispatch(getLists(boardID))
+        })
+        .catch(err => console.log(err))
+    } else {
+      axios.post('http://localhost:8000/api/tasklists/', { title: payload, board: boardID })
+        .then(res => {
+          dispatch(getLists(boardID))
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 }

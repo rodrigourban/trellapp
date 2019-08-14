@@ -14,6 +14,7 @@ class Board extends React.Component {
     lists: [],
     isAdding: false,
     background: '',
+    boardID: this.props.match.params.boardID,
   }
 
   componentDidMount() {
@@ -21,7 +22,7 @@ class Board extends React.Component {
   }
 
   loadData = () => {
-    this.props.GetLists(this.props.match.params.boardID)
+    this.props.GetLists(this.state.boardID)
   }
 
   onToggle = () => {
@@ -30,40 +31,32 @@ class Board extends React.Component {
     })
   }
   onCreateList = (value) => {
-    this.props.CreateList(this.props.match.params.boardID, value)
-    this.loadData()
+    this.props.CreateList(this.state.boardID, value)
+
   }
 
   onDeleteList = (listID) => {
-    this.props.DeleteList(listID);
+    this.props.DeleteList(this.state.boardID, listID);
   }
   onCreateTask = (listID, payload) => {
-    this.props.CreateTask(listID, payload)
-    this.loadData()
+    this.props.CreateTask(this.state.boardID, listID, payload)
   }
 
   onDeleteTask = (taskID) => {
-    this.props.DeleteTask(taskID)
-    this.loadData()
+    this.props.DeleteTask(this.state.boardID, taskID)
+
   }
 
   updateList = (value, index) => {
-    this.props.CreateList(this.props.params.match.boardID, value, index)
-    this.loadData()
+    this.props.CreateList(this.state.boardID, value, index)
+
   }
   deleteTask = (listID, taskID) => {
-    this.props.onDeleteTask(listID, taskID)
-    this.loadData()
+    this.props.onDeleteTask(this.state.boardID, listID, taskID)
+
   }
   sortItems = (firstItem, secondItem, tasklistID) => {
-    axios.post('http://localhost:8000/api/tasks/reorder', { firstID: firstItem, secondID: secondItem, tasklistID: tasklistID })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    this.loadData()
+    this.props.SwapTask(this.state.boardID, tasklistID, firstItem, secondItem)
   }
   render() {
     const currentList = this.props.lista.map((el) => (
@@ -103,10 +96,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     GetLists: (id) => dispatch(apiActions.getLists(id)),
-    DeleteList: (id) => dispatch(apiActions.deleteList(id)),
-    CreateList: (id, value) => dispatch(apiActions.createList(id, value)),
-    CreateTask: (listID, payload) => dispatch(apiActions.createTask(listID, payload)),
-    DeleteTask: (listID, taskID) => dispatch(apiActions.deleteTask(listID, taskID))
+    DeleteList: (boardID, id) => dispatch(apiActions.deleteList(boardID, id)),
+    CreateList: (boardID, id, value) => dispatch(apiActions.createList(boardID, id, value)),
+    CreateTask: (boardID, listID, payload) => dispatch(apiActions.createTask(boardID, listID, payload)),
+    DeleteTask: (boardID, listID, taskID) => dispatch(apiActions.deleteTask(boardID, listID, taskID)),
+    SwapTask: (boardID, tasklistID, firstID, secondID) => dispatch(apiActions.swapTask(boardID, tasklistID, firstID, secondID))
   }
 }
 
