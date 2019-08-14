@@ -44,7 +44,6 @@ class Board extends React.Component {
 
   onDeleteTask = (taskID) => {
     this.props.DeleteTask(this.state.boardID, taskID)
-
   }
 
   updateList = (value, index) => {

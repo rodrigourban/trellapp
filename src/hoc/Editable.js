@@ -27,8 +27,9 @@ const editable = (WrappedComponent) => {
         editing: false
       }, () => {
         if (this.isValueChanged()) {
+          console.log(this.props)
           if (this.props.taskID) {
-            this.props.onUpdateTask(this.props.listID, { title: this.domElm.textContent, task_list: this.props.listID }, this.props.taskID)
+            this.props.onUpdateTask(this.props.boardID, this.props.listID, { title: this.domElm.textContent, task_list: this.props.listID }, this.props.taskID)
           } else {
             this.props.onUpdateList(this.props.boardID, { title: this.domElm.textContent, board: this.props.boardID }, this.props.listID)
           }
@@ -72,6 +73,7 @@ const editable = (WrappedComponent) => {
           onBlur={this.save}
           onKeyDown={this.handleKeyDown}
           {...this.props}
+          style={{ textOverflow: 'ellipsis', wordBreak: 'break-all', whiteSpace: 'normal' }}
         >
           {this.props.value}
         </WrappedComponent>
@@ -82,7 +84,7 @@ const editable = (WrappedComponent) => {
   const mapDistpatchToProps = (dispatch) => {
     return {
       onUpdateList: (boardID, value, listID) => dispatch(apiActions.createList(boardID, value, listID)),
-      onUpdateTask: (listID, value, taskID) => dispatch(apiActions.createTask(listID, value, taskID))
+      onUpdateTask: (boardID, listID, value, taskID) => dispatch(apiActions.createTask(boardID, listID, value, taskID))
     }
   }
 

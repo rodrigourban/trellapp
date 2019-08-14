@@ -3,7 +3,7 @@ import editable from '../hoc/Editable'
 import { useDrag, useDrop } from 'react-dnd';
 import { ItemTypes } from './dragTypes';
 
-const Task = ({ key, value, listID, id, moveTask }) => {
+const Task = ({ key, value, listID, id, moveTask, boardID, onDelete }) => {
   const ref = useRef(null)
 
   const [, drop] = useDrop({
@@ -51,11 +51,11 @@ const Task = ({ key, value, listID, id, moveTask }) => {
       isDragging: monitor.isDragging()
     })
   })
-  const EditTitle = editable('div')
+  const EditTitle = editable('div-')
   drag(drop(ref))
   return (
     <div className="task"
-      style={{ opacity: isDragging ? 0.4 : 1, padding: '6px 8px 2px', backgroundColor: 'rgb(255,255,255)', boxShadow: 'rgba(9, 30, 66, 0.25) 1px 1px 0px', margin: '8px', borderRadius: '3px' }}
+      style={{ position: 'relative', opacity: isDragging ? 0.4 : 1, padding: '15px 8px 13px', backgroundColor: 'rgb(255,255,255)', boxShadow: 'rgba(9, 30, 66, 0.25) 1px 1px 0px', marginBottom: '8px', borderRadius: '3px', width: '100%' }}
       key={id}
       ref={ref}
     >
@@ -63,8 +63,9 @@ const Task = ({ key, value, listID, id, moveTask }) => {
         value={value}
         listID={listID}
         taskID={id}
+        boardID={boardID}
       />
-      {/* <button onClick={() => this.onDelete(task.id)} style={{ width: '30px' }}>...</button> */}
+      <div onClick={() => onDelete(id)} style={{ width: '30px', position: 'absolute', right: '-10px', top: '-5px' }}>...</div>
     </div>
   )
 }

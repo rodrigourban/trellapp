@@ -79,6 +79,7 @@ export const deleteList = (boardID, listID) => {
 
 export const createTask = (boardID, listID, payload, taskID = null) => {
   return dispatch => {
+    console.log(boardID, taskID, payload, listID)
     if (taskID) {
       axios.put(`http://localhost:8000/api/tasks/${taskID}`, payload)
         .then(res => {
@@ -104,9 +105,16 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
 }
 
 export const deleteTask = (boardID, taskID) => {
-  return {
-    type: action.DELETE_TASK,
-    taskID: taskID
+  return dispatch => {
+    axios.delete(`http://localhost:8000/api/tasks/${taskID}`)
+      .then(res => {
+        console.log(res)
+        dispatch(getLists(boardID))
+      })
+      .catch(err => {
+        console.log(err)
+        dispatch(getLists(boardID))
+      })
   }
 }
 

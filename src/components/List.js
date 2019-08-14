@@ -38,16 +38,18 @@ class List extends React.Component {
   render() {
     const EditTitle = Editable('div')
     return (
-      <div className="listContainer list">
-        <div className="list-title" ><EditTitle className="text" value={this.props.title} listID={this.props.id} boardID={this.props.board}></EditTitle><button className="button" onClick={() => this.onDeleteList(this.props.id)}>...</button></div>
+      <div className="listContainer list" style={{ padding: '8px' }}>
+        <div className="list-title" style={{ marginBottom: '8px' }} ><EditTitle className="text" value={this.props.title} listID={this.props.id} boardID={this.props.board}></EditTitle><button className="button" onClick={() => this.onDeleteList(this.props.id)}>...</button></div>
         <div className="list-content">
           {this.props.content.map(task =>
             (<Task
+              boardID={this.props.board}
               key={task.id}
               value={task.title}
               listID={this.props.id}
               id={task.id}
               moveTask={this.moveTask}
+              onDelete={this.onDelete}
             />
             ))}
         </div>

@@ -22,7 +22,7 @@ class TaskListSerializer(serializers.ModelSerializer):
         return (TaskList.objects.create(**validated_data))
 
     def get_tasks(self, obj):
-        content = Task.objects.all().filter(task_list=obj.pk).order_by('order')
+        content = Task.objects.all().filter(task_list=obj.pk, active=True).order_by('order')
         serializer = TaskSerializer(content, many=True)
         return (serializer.data)
 

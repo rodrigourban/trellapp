@@ -49,29 +49,7 @@ const getListsSuccess = (state, action) => {
 }
 
 
-const swapLists = (state, action) => {
-  return updateObj(
-    state, {
-      lists: actions.lists
-    }
-  )
-}
 
-const createTask = (state, action) => {
-  console.log(action)
-
-  return state
-}
-const deleteTask = (state, action) => {
-  axios.delete(`http://localhost:8000/api/tasks/${action.taskID}`)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  return state
-}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
