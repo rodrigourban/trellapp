@@ -20,7 +20,7 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "webpack-dev-server": "^3.3.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.11"
   },
   "scripts": {
     "start": "react-scripts start",
