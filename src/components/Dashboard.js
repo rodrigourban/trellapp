@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     this.loadData();
   }
   loadData = () => {
-    axios.get('http://localhost:8000/api/boards/')
+    axios.get('https://trello-clone-django.herokuapp.com/api/boards/')
       .then(res => {
         console.log(res)
         this.setState({
@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
   }
 
   deleteBoard = (id) => {
-    axios.delete(`http://localhost:8000/api/boards/${id}`)
+    axios.delete(`https://trello-clone-django.herokuapp.com/api/boards/${id}`)
       .then(res => {
         console.log("borrado exitosamente")
         this.loadData()

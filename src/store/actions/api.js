@@ -11,7 +11,7 @@ import axios from 'axios'
 export const swapTask = (boardID, tasklistID, firstID, secondID = null) => {
   return dispatch => {
     console.log(boardID, tasklistID, firstID, secondID)
-    axios.post('http://localhost:8000/api/tasks/reorder', { firstID: firstID, secondID: secondID, tasklistID: tasklistID })
+    axios.post('https://trello-clone-django.herokuapp.com/api/tasks/reorder', { firstID: firstID, secondID: secondID, tasklistID: tasklistID })
       .then(res => {
         console.log(res)
         dispatch(getLists(boardID))
@@ -47,7 +47,7 @@ export const deleteBoard = (id) => {
 
 export const getLists = (id) => {
   return dispatch => {
-    axios.get(`http://localhost:8000/api/tasklists/${id}`)
+    axios.get(`https://trello-clone-django.herokuapp.com/api/tasklists/${id}`)
       .then(res => {
         dispatch(getListsSuccess(res.data))
       })
@@ -66,7 +66,7 @@ export const getListsSuccess = (lists) => {
 
 export const deleteList = (boardID, listID) => {
   return dispatch => {
-    axios.delete(`http://localhost:8000/api/tasklists/${listID}`)
+    axios.delete(`https://trello-clone-django.herokuapp.com/api/tasklists/${listID}`)
       .then(res => {
         dispatch(getLists(boardID))
       })
@@ -80,7 +80,7 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
   return dispatch => {
     console.log(boardID, taskID, payload, listID)
     if (taskID) {
-      axios.put(`http://localhost:8000/api/tasks/${taskID}`, payload)
+      axios.put(`https://trello-clone-django.herokuapp.com/api/tasks/${taskID}`, payload)
         .then(res => {
           console.log(res)
           dispatch(getLists(boardID))
@@ -90,7 +90,7 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
           dispatch(getLists(boardID))
         })
     } else {
-      axios.post('http://localhost:8000/api/tasks/', { title: payload, task_list: listID })
+      axios.post('https://trello-clone-django.herokuapp.com/api/tasks/', { title: payload, task_list: listID })
         .then(res => {
           console.log(res)
           dispatch(getLists(boardID))
@@ -105,7 +105,7 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
 
 export const deleteTask = (boardID, taskID) => {
   return dispatch => {
-    axios.delete(`http://localhost:8000/api/tasks/${taskID}`)
+    axios.delete(`https://trello-clone-django.herokuapp.com/api/tasks/${taskID}`)
       .then(res => {
         console.log(res)
         dispatch(getLists(boardID))
@@ -120,13 +120,13 @@ export const deleteTask = (boardID, taskID) => {
 export const createList = (boardID, payload, listID = null) => {
   return dispatch => {
     if (listID) {
-      axios.put(`http://localhost:8000/api/tasklists/${listID}`, payload)
+      axios.put(`https://trello-clone-django.herokuapp.com/api/tasklists/${listID}`, payload)
         .then(res => {
           dispatch(getLists(boardID))
         })
         .catch(err => console.log(err))
     } else {
-      axios.post('http://localhost:8000/api/tasklists/', { title: payload, board: boardID })
+      axios.post('https://trello-clone-django.herokuapp.com/api/tasklists/', { title: payload, board: boardID })
         .then(res => {
           dispatch(getLists(boardID))
         })
