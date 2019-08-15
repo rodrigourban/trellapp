@@ -25,7 +25,7 @@ SECRET_KEY = 'mze13qmm9b3+x15u(tedpt)ke7!bfs48x2)2xo4@5lry+&0&6%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['trello-clone-django.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['trello-clone-django.herokuapp.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -122,7 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join('BASE_DIR', 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build/static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 CORS_ORIGIN_ALLOW_ALL = True

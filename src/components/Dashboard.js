@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     this.loadData();
   }
   loadData = () => {
-    axios.get('http://localhost:8000/api/boards')
+    axios.get('http://localhost:8000/api/boards/')
       .then(res => {
         console.log(res)
         this.setState({

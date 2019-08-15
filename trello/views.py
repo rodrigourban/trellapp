@@ -12,6 +12,7 @@ def board_list(request):
     List all boards, or create one
     """
     if request.method == 'GET':
+        print("GAAAAAAAY")
         boards = Board.objects.all().filter(active=True)
         serializer = BoardSerializer(boards, many=True)
         return Response(serializer.data)
