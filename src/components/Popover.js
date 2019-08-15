@@ -28,7 +28,7 @@ class Popover extends React.Component {
       title: this.state.title,
       background: this.state.color
     }
-    axios.post('http://localhost:8000/api/boards/', payload)
+    axios.post('https://trello-clone-django.herokuapp.com/api/boards/', payload)
       .then(res => {
         console.log(res)
         this.props.closeModal()
