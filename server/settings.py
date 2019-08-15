@@ -25,7 +25,7 @@ SECRET_KEY = 'mze13qmm9b3+x15u(tedpt)ke7!bfs48x2)2xo4@5lry+&0&6%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['trello-clone-django.herokuapp.com']
+ALLOWED_HOSTS = ['trello-clone-django.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,6 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join('BASE_DIR', 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ('http://localhost:3000',)
