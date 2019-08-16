@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     this.props.openModal()
   }
 
-  deleteBoard = (id) => {
+  deleteBoard = (e, id) => {
     e.stopPropagation();
     this.props.deleteBoard(id);
   }
@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
           }>
             <div style={{ fontSize: '16px', lineHeight: '20px', color: '#fffff', fontWeight: '700', color: 'rgb(255,255,255)' }}>{board.title}</div>
           </div>
-          <div onClick={() => this.deleteBoard(board.id)} style={{ width: '30px', position: 'absolute', right: '-7px', top: '7px' }} >x</div>
+          <div onClick={(e) => this.deleteBoard(e, board.id)} style={{ width: '30px', position: 'absolute', right: '-7px', top: '7px' }} >x</div>
         </NavLink >
       )
     })
