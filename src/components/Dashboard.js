@@ -27,7 +27,7 @@ class Dashboard extends React.Component {
           }>
             <div style={{ fontSize: '16px', lineHeight: '20px', color: '#fffff', fontWeight: '700', color: 'rgb(255,255,255)' }}>{board.title}</div>
           </div>
-          {/* <button onClick={() => this.deleteBoard(board.id)}>delete</button> */}
+          <div onClick={() => this.deleteBoard(board.id)} style={{ width: '30px', position: 'relative', right: '-10px', top: '-5px' }} >...</div>
         </NavLink >
       )
     })
