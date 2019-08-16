@@ -1,4 +1,4 @@
-prod = {
+const prod = {
   url: {
     API_URL: 'https://trello-clone-django.herokuapp.com'
   }
