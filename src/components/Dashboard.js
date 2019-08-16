@@ -14,6 +14,7 @@ class Dashboard extends React.Component {
   }
 
   deleteBoard = (id) => {
+    e.stopPropagation();
     this.props.deleteBoard(id);
   }
   render() {
