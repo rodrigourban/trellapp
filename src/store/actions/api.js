@@ -43,7 +43,7 @@ export const getBoards = () => {
 
 export const getBoardsSuccess = (payload) => {
   return {
-    type: payload,
+    type: action.GET_BOARDS_SUCCESS,
     payload: payload,
   }
 }

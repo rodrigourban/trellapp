@@ -6,7 +6,7 @@ import * as apiActions from '../store/actions/api'
 import logo from '../assets/Boards.png'
 
 class Dashboard extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.getBoards()
   }
   openModal = () => {

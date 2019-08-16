@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
 import { updateObj } from '../helper'
-import axios from 'axios';
+
 const initialState = {
   error: null,
   isAddingList: false,
@@ -11,7 +11,7 @@ const initialState = {
 const getBoardsSuccess = (state, action) => {
   return updateObj(
     state, {
-      boards: action.boards
+      boards: action.payload
     }
   )
 }
@@ -30,7 +30,7 @@ const getListsSuccess = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GET_BOARDS: return getBoardsSuccess(state, action);
+    case actionTypes.GET_BOARDS_SUCCESS: return getBoardsSuccess(state, action);
     case actionTypes.GET_LISTS_SUCESS: return getListsSuccess(state, action);
     default: return state;
   }
