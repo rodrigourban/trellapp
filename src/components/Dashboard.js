@@ -2,44 +2,22 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as modalActions from '../store/actions/modal';
-import axios from 'axios';
+import * as apiActions from '../store/actions/api'
 import logo from '../assets/Boards.png'
 
 class Dashboard extends React.Component {
-  state = {
-    boards: []
-  }
-  componentDidMount() {
-    this.loadData();
-  }
-  loadData = () => {
-    axios.get('https://trello-clone-django.herokuapp.com/api/boards/')
-      .then(res => {
-        console.log(res)
-        this.setState({
-          boards: res.data
-        })
-      })
-      .catch(err => {
-        console.log(err)
-      })
+  componentWillMount() {
+    this.props.getBoards()
   }
   openModal = () => {
     this.props.openModal()
   }
 
   deleteBoard = (id) => {
-    axios.delete(`https://trello-clone-django.herokuapp.com/api/boards/${id}`)
-      .then(res => {
-        console.log("borrado exitosamente")
-        this.loadData()
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    this.props.deleteBoard(id);
   }
   render() {
-    const content = this.state.boards.map((board) => {
+    const content = this.props.boards.map((board) => {
       return (
         <NavLink to={`/board/${board.id}`} className="dashboard-board" style={{
           height: '100px', backgroundColor: board.background, borderRadius: '5px',
@@ -67,10 +45,18 @@ class Dashboard extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    openModal: () => dispatch(modalActions.openModal()),
+    boards: state.api.boards
   }
 }
 
-export default connect(null, mapDispatchToProps)(Dashboard)
+const mapDispatchToProps = dispatch => {
+  return {
+    openModal: () => dispatch(modalActions.openModal()),
+    getBoards: () => dispatch(apiActions.getBoards()),
+    deleteBoard: (id) => dispatch(apiActions.deleteBoard(id)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

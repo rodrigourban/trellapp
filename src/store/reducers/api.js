@@ -8,7 +8,7 @@ const initialState = {
   boards: [],
   lists: [],
 }
-const getBoards = (state, action) => {
+const getBoardsSuccess = (state, action) => {
   return updateObj(
     state, {
       boards: action.boards
@@ -18,7 +18,6 @@ const getBoards = (state, action) => {
 
 
 const getListsSuccess = (state, action) => {
-  console.log(action)
   return updateObj(
     state, {
       lists: action.lists
@@ -31,7 +30,7 @@ const getListsSuccess = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GET_BOARDS: return getBoards(state, action);
+    case actionTypes.GET_BOARDS: return getBoardsSuccess(state, action);
     case actionTypes.GET_LISTS_SUCESS: return getListsSuccess(state, action);
     default: return state;
   }
