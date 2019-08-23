@@ -27,7 +27,6 @@ const editable = (WrappedComponent) => {
         editing: false
       }, () => {
         if (this.isValueChanged()) {
-          console.log(this.props)
           if (this.props.taskID) {
             this.props.onUpdateTask(this.props.boardID, this.props.listID, { title: this.domElm.textContent, task_list: this.props.listID }, this.props.taskID)
           } else {

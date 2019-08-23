@@ -1,6 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import Editable from '../hoc/Editable'
+
 const colors = [
   'rgb(0,121,191)',
   'rgb(210,144,52)',
@@ -45,11 +44,6 @@ class Popover extends React.Component {
   }
 
   render() {
-    const colorButtons = colors.map((color, key) => {
-      return (
-        <div key={key} style={{ height: '100%', width: '100%', backgroundColor: color }} onClick={() => this.handleColor(color)}></div>
-      )
-    })
     return (
       this.props.isOpen ?
         <div onClick={this.handleClose} style={{ backgroundColor: 'rgba(1,1,1,0.4)', width: '100%', height: '100%', position: 'absolute', zIndex: '5' }}>

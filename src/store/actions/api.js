@@ -14,11 +14,22 @@ export const swapList = (boardID, firstID, secondID) => {
   }
 }
 
-export const swapTask = (boardID, tasklistID, firstID, secondID = null) => {
+export const swapTask = (boardID, firstID, secondID, tasklistID) => {
   return dispatch => {
-    axios.post(`${config.url.API_URL}/api/tasks/reorder`, { firstID: firstID, secondID: secondID, tasklistID: tasklistID })
+    let payload = {}
+    if (tasklistID) {
+      payload = {
+        firstID: firstID,
+        tasklistID: tasklistID
+      }
+    } else {
+      payload = {
+        firstID: firstID,
+        secondID: secondID
+      }
+    }
+    axios.post(`${config.url.API_URL}/api/tasks/reorder`, payload)
       .then(res => {
-        console.log(res)
         dispatch(getLists(boardID))
       })
       .catch(err => {
@@ -64,7 +75,6 @@ export const deleteBoard = (id) => {
   return dispatch => {
     axios.delete(`${config.url.API_URL}/api/boards/${id}`)
       .then(res => {
-        console.log("borrado exitosamente")
         dispatch(getBoards())
       })
       .catch(err => {
@@ -106,11 +116,9 @@ export const deleteList = (boardID, listID) => {
 
 export const createTask = (boardID, listID, payload, taskID = null) => {
   return dispatch => {
-    console.log(boardID, taskID, payload, listID)
     if (taskID) {
       axios.put(`${config.url.API_URL}/api/tasks/${taskID}`, payload)
         .then(res => {
-          console.log(res)
           dispatch(getLists(boardID))
         })
         .catch(err => {
@@ -120,7 +128,6 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
     } else {
       axios.post(`${config.url.API_URL}/api/tasks/`, { title: payload, task_list: listID })
         .then(res => {
-          console.log(res)
           dispatch(getLists(boardID))
         })
         .catch(err => {
@@ -135,7 +142,6 @@ export const deleteTask = (boardID, taskID) => {
   return dispatch => {
     axios.delete(`${config.url.API_URL}/api/tasks/${taskID}`)
       .then(res => {
-        console.log(res)
         dispatch(getLists(boardID))
       })
       .catch(err => {

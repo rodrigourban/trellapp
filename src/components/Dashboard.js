@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as modalActions from '../store/actions/modal';
 import * as apiActions from '../store/actions/api'
@@ -14,7 +14,7 @@ class Dashboard extends React.Component {
   }
 
   deleteBoard = (e, id) => {
-    e.stopPropagation();
+    e.preventDefault();
     this.props.deleteBoard(id);
   }
   render() {

@@ -73,17 +73,16 @@ def tasklist_detail(request, pk):
     """
     Retrieve, update or delete a task
     """
-    try:
-        tasklist = TaskList.objects.get(pk=pk)
-    except TaskList.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
     if request.method == 'GET':
         tasks = TaskList.objects.all().filter(board=pk, active=True).order_by('order')
         serializer = TaskListSerializer(tasks, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
+        try:
+            tasklist = TaskList.objects.get(pk=pk)
+        except TaskList.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = TaskListSerializer(tasklist, data=request.data)
         if (serializer.is_valid()):
             serializer.save()
@@ -91,6 +90,18 @@ def tasklist_detail(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+        # Soft delete and reorder remaining
+        try:
+            tasklist = TaskList.objects.get(pk=pk)
+        except TaskList.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        remaining = TaskList.objects.all().filter(board=tasklist.board, active=True,
+                                                  order__gt=tasklist.order)
+        for el in remaining:
+            el.order -= 1
+            el.save()
+
         tasklist.active = False
         tasklist.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -127,6 +138,13 @@ def task_detail(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+        # Soft delete and reorder remainings
+        remaining = Task.objects.all().filter(task_list=task.task_list, active=True,
+                                              order__gt=task.order)
+        for el in remaining:
+            el.order -= 1
+            el.save()
+
         task.active = False
         task.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -140,8 +158,7 @@ def reorder_list(request):
     """
     if request.method == 'POST':
         if ('firstID' not in request.data.keys() or
-                'secondID' not in request.data.keys() or
-                first.order == second.order
+                'secondID' not in request.data.keys()
             ):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -154,7 +171,7 @@ def reorder_list(request):
         i = second.order
         if first.order <= second.order:
             tasks = TaskList.objects.all().filter(board=first.board, active=True,
-                                              order__gt=first.order, order__lte=second.order)
+                                                  order__gt=first.order, order__lte=second.order)
             for el in tasks:
                 el.order -= 1
                 el.save()
@@ -165,7 +182,7 @@ def reorder_list(request):
             for el in tasks:
                 el.order += 1
                 el.save()
-        
+
         first.order = i
         first.save()
 
@@ -177,47 +194,88 @@ def reorder_list(request):
 @api_view(['POST'])
 def reorder_tasks(request):
     """
-    Allows to reorder tasks and change their tasklist
+     Allows to reorder tasks and change their tasklist
+     firstID: origen, secondID: destination,
+     taskListID: empty list ID to add new task
     """
     if request.method == 'POST':
         second = None
-        if ('firstID' not in request.data.keys() or
-                'tasklistID' not in request.data.keys()):
+        tasklist = None
+        if ('firstID' not in request.data.keys()):
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data={"message": "Please enter valid fields"})
         try:
             first = Task.objects.get(pk=request.data['firstID'])
-            tasklist = TaskList.objects.get(pk=request.data['tasklistID'])
+            if 'tasklistID' in request.data.keys():
+                tasklist = TaskList.objects.get(pk=request.data['tasklistID'])
             if 'secondID' in request.data.keys():
                 second = Task.objects.get(pk=request.data['secondID'])
         except Exception:
             return Response(status=status.HTTP_404_NOT_FOUND,
                             data={"message": "Id given not found"})
 
-        if second:
-            # Change order inside a tasklist
-            i = second.order
-            if first.order <= second.order:
-                tasks = Task.objects.all().filter(task_list=tasklist, active=True,
-                                                  order__gt=first.order, order__lte=second.order)
-                for el in tasks:
-                    el.order -= 1
-                    el.save()
-
-            else:
-                tasks = Task.objects.all().filter(task_list=tasklist, active=True,
-                                                      order__gte=second.order, order__lt=first.order)
-                for el in tasks:
-                    el.order += 1
-                    el.save()
-
-            i = second.order
-            first.order = i
-            first.save()
-        else:
+        if tasklist:
+            # Move into a empty list
             # If tasklist doesnt have any task, make it the first
-            first.order = 0
+            # Also rearrange source tasklist for missing element
+            newOrder = 1
+            tasks = Task.objects.all().filter(task_list=first.task_list, active=True,
+                                              order__gt=first.order)
+            for el in tasks:
+                el.order -= 1
+                el.save()
 
-        first.task_list = tasklist
-        first.save()
+            destinyTasks = Task.objects.all().filter(
+                task_list=tasklist, active=True).count()
+            if destinyTasks >= 1:
+                newOrder = destinyTasks + 1
+            first.order = newOrder
+            first.task_list = tasklist
+            first.save()
+
+        else:
+            if second:
+                # Change order inside a tasklist
+                i = second.order
+                if first.task_list.id == second.task_list.id:
+                    # If they are within the same tasklist, order matters
+                    if first.order < second.order:
+                        tasks = Task.objects.all().filter(task_list=second.task_list, active=True,
+                                                          order__gt=first.order, order__lte=second.order)
+                        for el in tasks:
+                            el.order -= 1
+                            el.save()
+
+                        first.order = i
+                        first.save()
+
+                    else:
+                        tasks = Task.objects.all().filter(task_list=second.task_list, active=True,
+                                                          order__gte=second.order, order__lt=first.order)
+                        for el in tasks:
+                            el.order += 1
+                            el.save()
+
+                        first.order = i
+                        first.save()
+                else:
+                    # Elements are not in the same tasklist, order doesnt matters
+                    # Rearrange the source tasklist
+                    sourceTasks = Task.objects.all().filter(task_list=first.task_list, active=True,
+                                                            order__gt=first.order)
+                    for el in sourceTasks:
+                        el.order -= 1
+                        el.save()
+
+                    tasks = Task.objects.all().filter(task_list=second.task_list, active=True,
+                                                      order__gte=second.order)
+
+                    for el in tasks:
+                        el.order += 1
+                        el.save()
+
+                    first.order = i
+                    first.task_list = second.task_list
+                    first.save()
+
         return Response(status=status.HTTP_200_OK, data={"message": "Tasks reordered successfully"})

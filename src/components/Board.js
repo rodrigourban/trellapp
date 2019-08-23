@@ -3,9 +3,17 @@ import List from './List';
 import NewCard from './NewCard'
 import { connect } from 'react-redux'
 import * as apiActions from '../store/actions/api'
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
-import axios from 'axios'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import styled from 'styled-components'
+
+const ContainerBoard = styled.div`
+display: flex;
+height: 100%;
+`
+
+const Container = styled.div`
+display: flex;
+`
 
 
 class Board extends React.Component {
@@ -13,16 +21,13 @@ class Board extends React.Component {
   state = {
     lists: [],
     isAdding: false,
+    isAddingTask: false,
     background: '',
     boardID: this.props.match.params.boardID,
   }
 
   componentDidMount() {
-    this.loadData()
-  }
-
-  loadData = () => {
-    this.props.GetLists(this.state.boardID)
+    this.props.getLists(this.state.boardID)
   }
 
   onToggle = () => {
@@ -30,56 +35,88 @@ class Board extends React.Component {
       isAdding: !this.state.isAdding
     })
   }
-  onCreateList = (value) => {
-    this.props.CreateList(this.state.boardID, value)
-
+  onToggleTask = () => {
+    this.setState({
+      isAddingTask: !this.state.isAddingTask
+    })
   }
 
-  onDeleteList = (listID) => {
-    this.props.DeleteList(this.state.boardID, listID);
-  }
-  onCreateTask = (listID, payload) => {
-    this.props.CreateTask(this.state.boardID, listID, payload)
-  }
+  onDragEnd = (result) => {
+    const { destination, source, type } = result;
 
-  onDeleteTask = (taskID) => {
-    this.props.DeleteTask(this.state.boardID, taskID)
-  }
+    if (!destination) {
+      return
+    }
 
-  updateList = (value, index) => {
-    this.props.CreateList(this.state.boardID, value, index)
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return
+    }
 
-  }
-  deleteTask = (listID, taskID) => {
-    this.props.onDeleteTask(this.state.boardID, listID, taskID)
+    if (type === 'column') {
+      const firstID = this.props.lista[source.index].id;
+      const secondID = this.props.lista[destination.index].id;
+      this.props.swapList(this.state.boardID, firstID, secondID)
+    }
 
-  }
-  sortItems = (firstItem, secondItem, tasklistID) => {
-    this.props.SwapTask(this.state.boardID, tasklistID, firstItem, secondItem)
+    if (type === 'task') {
+      const destinationList = destination.droppableId.split("l")[1];
+      const sourceList = source.droppableId.split("l")[1]
+      if (destinationList === sourceList) {
+        const firstID = this.props.lista[sourceList].tasks[source.index].id;
+        const secondID = this.props.lista[destinationList].tasks[destination.index].id;
+        this.props.swapTask(this.state.boardID, firstID, secondID, null)
+      } else {
+        const firstID = this.props.lista[sourceList].tasks[source.index].id
+        if (this.props.lista[destinationList].tasks.length <= 0 || destination.index >= this.props.lista[destinationList].tasks.length) {
+          //If first of list or last
+          this.props.swapTask(this.state.boardID, firstID, null, this.props.lista[destinationList].id)
+        } else {
+          const secondID = this.props.lista[destinationList].tasks[destination.index].id;
+          this.props.swapTask(this.state.boardID, firstID, secondID, null)
+        }
+      }
+    }
   }
   render() {
-    const currentList = this.props.lista.map((el) => (
-      <List className="list"
-        title={el.title}
-        content={el.tasks}
-        key={el.id}
-        id={el.id}
-        board={el.board}
-        createTask={this.onCreateTask}
-        deleteTask={this.onDeleteTask}
-        deleteList={this.onDeleteList}
-        sortItems={this.sortItems}
-      />
-    ))
     return (
-      <div className="board" >
-        <DndProvider backend={HTML5Backend}>
-          {currentList}
+      <ContainerBoard>
+        <DragDropContext
+          onDragEnd={this.onDragEnd}
+        >
+          <Droppable droppableId="all-columns" direction="horizontal" type="column">
+            {(provided) => (
+              <Container
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {this.props.lista.map((el, index) => (
+                  <List className="list"
+                    title={el.title}
+                    content={el.tasks}
+                    key={index}
+                    index={index}
+                    id={el.id}
+                    board={el.board}
+
+                    isAdding={this.state.isAddingTask}
+                    onToggle={this.onToggleTask}
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  />
+                ))}
+                {provided.placeholder}
+              </Container>
+            )}
+          </Droppable>
           <div className="listContainer" >
-            <NewCard isAdding={this.state.isAdding} title="Add a list" onToggle={this.onToggle} onAdd={this.onCreateList}></NewCard>
+            <NewCard isAdding={this.state.isAdding} title="Add a list" onToggle={this.onToggle} boardID={this.state.boardID} />
           </div>
-        </DndProvider>
-      </div >
+        </DragDropContext>
+      </ContainerBoard>
     )
   }
 }
@@ -94,12 +131,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetLists: (id) => dispatch(apiActions.getLists(id)),
-    DeleteList: (boardID, id) => dispatch(apiActions.deleteList(boardID, id)),
-    CreateList: (boardID, id, value) => dispatch(apiActions.createList(boardID, id, value)),
-    CreateTask: (boardID, listID, payload) => dispatch(apiActions.createTask(boardID, listID, payload)),
-    DeleteTask: (boardID, listID, taskID) => dispatch(apiActions.deleteTask(boardID, listID, taskID)),
-    SwapTask: (boardID, tasklistID, firstID, secondID) => dispatch(apiActions.swapTask(boardID, tasklistID, firstID, secondID))
+    getLists: (id) => dispatch(apiActions.getLists(id)),
+    swapList: (boardID, firstID, secondID) => dispatch(apiActions.swapList(boardID, firstID, secondID)),
+    swapTask: (boardID, firstID, secondID, tasklistID) => dispatch(apiActions.swapTask(boardID, firstID, secondID, tasklistID)),
   }
 }
 

@@ -12,9 +12,9 @@ import { connect } from 'react-redux';
 class Main extends React.Component {
   render() {
     return (
-      <Aux className="bija">
+      <Aux>
         <Popover isOpen={this.props.modalOpen} closeModal={this.props.closeModal} createBoard={this.props.createBoard} />
-        <Router className="main">
+        <Router className="main" style={{ height: '100%' }}>
           <Navbar></Navbar>
           <Route path="/" exact component={Boardd} />
           <Route path="/board/:boardID" component={Board} />
