@@ -53,7 +53,6 @@ class List extends React.Component {
   }
   render() {
     const EditTitle = Editable('div')
-    console.log(this.props.index)
     return (
       <Draggable key={this.props.id} draggableId={this.props.id} index={this.props.index}>
         {(provided) => (

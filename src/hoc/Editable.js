@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as apiActions from '../store/actions/api'
+
 const editable = (WrappedComponent) => {
   class Editable extends React.Component {
     state = {

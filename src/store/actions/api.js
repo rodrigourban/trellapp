@@ -3,39 +3,22 @@ import axios from 'axios'
 import { config } from '../../Constants'
 
 export const swapList = (boardID, firstID, secondID) => {
-  return dispatch => {
-    axios.post(`${config.url.API_URL}/api/tasklists/reorder`, { firstID: firstID, secondID: secondID })
-      .then(res => {
-        dispatch(getLists(boardID))
-      })
-      .catch(err => {
-        dispatch(getLists(boardID))
-      })
+  return {
+    type: action.SWAP_LIST,
+    firstID: firstID,
+    secondID: secondID
   }
 }
 
-export const swapTask = (boardID, firstID, secondID, tasklistID) => {
-  return dispatch => {
-    let payload = {}
-    if (tasklistID) {
-      payload = {
-        firstID: firstID,
-        tasklistID: tasklistID
-      }
-    } else {
-      payload = {
-        firstID: firstID,
-        secondID: secondID
-      }
-    }
-    axios.post(`${config.url.API_URL}/api/tasks/reorder`, payload)
-      .then(res => {
-        dispatch(getLists(boardID))
-      })
-      .catch(err => {
-        console.log(err)
-        dispatch(getLists(boardID))
-      })
+
+export const swapTask = (boardID, firstID, secondID, sourceList, destinyList, tasklistID) => {
+  return {
+    type: action.SWAP_TASK,
+    firstID: firstID,
+    secondID: secondID,
+    sourceList: sourceList,
+    destinyList: destinyList,
+    tasklistID: tasklistID
   }
 }
 

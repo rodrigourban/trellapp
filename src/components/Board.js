@@ -56,28 +56,13 @@ class Board extends React.Component {
     }
 
     if (type === 'column') {
-      const firstID = this.props.lista[source.index].id;
-      const secondID = this.props.lista[destination.index].id;
-      this.props.swapList(this.state.boardID, firstID, secondID)
+      this.props.swapList(this.state.boardID, source.index, destination.index)
     }
 
     if (type === 'task') {
-      const destinationList = destination.droppableId.split("l")[1];
-      const sourceList = source.droppableId.split("l")[1]
-      if (destinationList === sourceList) {
-        const firstID = this.props.lista[sourceList].tasks[source.index].id;
-        const secondID = this.props.lista[destinationList].tasks[destination.index].id;
-        this.props.swapTask(this.state.boardID, firstID, secondID, null)
-      } else {
-        const firstID = this.props.lista[sourceList].tasks[source.index].id
-        if (this.props.lista[destinationList].tasks.length <= 0 || destination.index >= this.props.lista[destinationList].tasks.length) {
-          //If first of list or last
-          this.props.swapTask(this.state.boardID, firstID, null, this.props.lista[destinationList].id)
-        } else {
-          const secondID = this.props.lista[destinationList].tasks[destination.index].id;
-          this.props.swapTask(this.state.boardID, firstID, secondID, null)
-        }
-      }
+      const destinationList = parseInt(destination.droppableId.split("l")[1]);
+      const sourceList = parseInt(source.droppableId.split("l")[1]);
+      this.props.swapTask(this.state.boardID, source.index, destination.index, sourceList, destinationList)
     }
   }
   render() {
@@ -133,7 +118,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getLists: (id) => dispatch(apiActions.getLists(id)),
     swapList: (boardID, firstID, secondID) => dispatch(apiActions.swapList(boardID, firstID, secondID)),
-    swapTask: (boardID, firstID, secondID, tasklistID) => dispatch(apiActions.swapTask(boardID, firstID, secondID, tasklistID)),
+    swapTask: (boardID, firstID, secondID, sourceList, destinyList, tasklistID) => dispatch(apiActions.swapTask(boardID, firstID, secondID, sourceList, destinyList, tasklistID)),
   }
 }
 
