@@ -63,7 +63,9 @@ class List extends React.Component {
           >
             <Title>
               <EditTitle className="text" value={this.props.title} listID={this.props.id} boardID={this.props.board} />
-              <button className="button" onClick={() => this.props.deleteList(this.props.board, this.props.id)}>...</button>
+              <div onClick={() => this.props.deleteList(this.props.board, this.props.id)}><i class="material-icons">
+                delete
+              </i></div>
             </Title>
             <Droppable droppableId={"l" + this.props.index} type="task">
               {(provided) => (

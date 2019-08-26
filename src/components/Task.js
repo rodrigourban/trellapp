@@ -33,7 +33,9 @@ class Task extends React.Component {
               taskID={this.props.id}
               boardID={this.props.boardID}
             />
-            <button onClick={(board, listID, taskID) => this.props.deleteTask(this.props.boardID, this.props.id)} style={{ width: '30px', position: 'absolute', right: '-10px', top: '-5px' }}>...</button>
+            <div onClick={(board, listID, taskID) => this.props.deleteTask(this.props.boardID, this.props.id)} style={{ width: '30px', position: 'absolute', right: '-15px', top: '-8px', color: 'black' }}><i class="material-icons">
+              delete
+            </i></div>
           </Container>
         )
         }

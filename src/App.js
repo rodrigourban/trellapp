@@ -11,13 +11,17 @@ import styled from 'styled-components'
 
 const Container = styled.main`
 `
+const BoardContainer = styled.div`
+overflow-y: hidden;
+overflow-x: scroll;
+`
 
 class Main extends React.Component {
   render() {
     return (
       <Container>
         <Popover isOpen={this.props.modalOpen} closeModal={this.props.closeModal} createBoard={this.props.createBoard} />
-        <Router className="main" style={{ height: '100%' }}>
+        <Router className="main">
           <Navbar></Navbar>
           <Route path="/" exact component={Boardd} />
           <Route path="/board/:boardID" component={Board} />

@@ -9,6 +9,8 @@ import styled from 'styled-components'
 const ContainerBoard = styled.div`
 display: flex;
 height: 100%;
+overflow-y: hidden;
+overflow-x: scroll;
 `
 
 const Container = styled.div`

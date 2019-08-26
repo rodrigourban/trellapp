@@ -32,16 +32,13 @@ body {
     font-weight: '700';
   }
 }
-.main{
-  
-}
 .board {
   display: flex;
   flex-direction: row;
   height: auto;
   align-items: flex-start;
   height: 100%;
-  overflow: auto;
+  overflow: scroll;
   ::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: #888787;
