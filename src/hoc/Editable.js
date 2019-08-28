@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as apiActions from '../store/actions/api'
+
 const editable = (WrappedComponent) => {
   class Editable extends React.Component {
     state = {
@@ -27,7 +28,6 @@ const editable = (WrappedComponent) => {
         editing: false
       }, () => {
         if (this.isValueChanged()) {
-          console.log(this.props)
           if (this.props.taskID) {
             this.props.onUpdateTask(this.props.boardID, this.props.listID, { title: this.domElm.textContent, task_list: this.props.listID }, this.props.taskID)
           } else {

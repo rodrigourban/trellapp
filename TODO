@@ -1,0 +1,4 @@
+- Add a delete button to boards.
+- Change boards logic to redux, add refresh on create/delete
+- Swap task from list to empty list
+- Swap lists 

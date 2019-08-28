@@ -1,5 +1,49 @@
 import React from 'react'
-import Aux from '../hoc/AuxHoc'
+import { connect } from 'react-redux'
+import * as apiActions from '../store/actions/api'
+import styled from 'styled-components'
+
+const Container = styled.div`
+width: 100%;
+background: wheat;
+background-color: rgba(1,1,1,0.3);
+border-radius: 5px;
+padding: 7px;
+`
+const AddContainer = styled.div`
+background-color: rgba(0,0,0,0.2);
+border-radius: 5px;
+padding: 3px;
+width: 100%;
+`
+const CustomInput = styled.input`
+height: 36px;
+padding: 5px;
+width: 100%;
+margin-bottom: 3px;
+border-radius: 3px ;
+`
+const AddBtn = styled.button`
+height: 30px;
+width: 50px;
+color: white;
+background-color: rgb(90,172,68);
+padding: 0;
+border-width: 0;
+outline: none;
+border-radius: 2px;
+`
+const CloseBtn = styled.button`
+height: 30px;
+width: 30px;
+background-color: transparent;
+padding: auto;
+border-width: 0;
+outline: none;
+border-radius: 2px;
+`
+
+
 class NewCard extends React.Component {
   state = {
     value: ""
@@ -11,24 +55,33 @@ class NewCard extends React.Component {
     })
   }
   onAdd = () => {
-    this.props.onAdd(this.state.value)
+    if (this.props.listID) {
+      this.props.onCreateTask(this.props.boardID, this.props.listID, this.state.value)
+    } else {
+      this.props.onCreateList(this.props.boardID, this.state.value)
+    }
     this.props.onToggle()
   }
   render() {
     const content = this.props.isAdding ?
-      <div className={"addBox" + " " + this.props.styles}>
-        <input placeholder={this.props.title} className="addInput" onChange={this.onChange} style={{ height: '36px', padding: '5px', width: '100%', marginBottom: '3px', borderRadius: '3px' }} />
-        <button onClick={this.onAdd} style={{ height: '30px', width: '50px', color: 'white', backgroundColor: 'rgb(90,172,68)', padding: '0', borderWidth: '0', outline: 'none', borderRadius: '2px' }}>Add</button>
-        <button onClick={this.props.onToggle} style={{ height: '30px', width: '30px', backgroundColor: 'transparent', padding: 'auto', borderWidth: '0', outline: 'none', borderRadius: '2px' }}>X</button>
-      </div >
+      <AddContainer>
+        <CustomInput placeholder={this.props.title} onChange={this.onChange} />
+        <AddBtn onClick={this.onAdd}>Add</AddBtn>
+        <CloseBtn onClick={this.props.onToggle}>X</CloseBtn>
+      </AddContainer >
       :
-      <div className={"listBox" + " " + this.props.styles} onClick={this.props.onToggle}>
-        <a className="addButton" style={{ borderRadius: '3px', padding: '4px' }}>+ {this.props.title}</a>
-      </div>
-    return (
-      <Aux>{content}</Aux>
-    )
+      <Container onClick={this.props.onToggle}>
+        {this.props.title}
+      </Container>
+    return content;
   }
 }
 
-export default NewCard;
+const mapDispatchToProps = dispatch => {
+  return {
+    onCreateList: (boardID, value) => dispatch(apiActions.createList(boardID, value)),
+    onCreateTask: (boardID, listID, payload) => dispatch(apiActions.createTask(boardID, listID, payload)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(NewCard);

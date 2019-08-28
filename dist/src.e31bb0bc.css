@@ -1,0 +1,106 @@
+::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5em; }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(230, 230, 230, 0.6);
+  border-radius: 10px; }
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0.2; }
+
+body {
+  scrollbar-face-color: rgba(230, 230, 230, 0.6);
+  scrollbar-track-color: rgba(0, 0, 0, 0.2); }
+
+* {
+  box-sizing: border-box; }
+
+body {
+  height: 100vh;
+  margin: 0; }
+
+#app {
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column; }
+
+.navbar {
+  height: 40px;
+  background-color: #026aa7;
+  padding: 4px;
+  display: flex;
+  justify-content: center; }
+  .navbar .navbar-middle {
+    font-family: 'Dancing Script', cursive;
+    height: 30px;
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: '700'; }
+
+.board {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  align-items: flex-start;
+  height: 100%;
+  overflow: auto; }
+  .board ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #888787; }
+
+.listContainer {
+  height: auto;
+  margin-top: 15px;
+  margin-left: 5px;
+  min-width: 272px;
+  width: 30px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column; }
+  .listContainer.list {
+    background-color: #dfe1e6;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+    .listContainer.list .list-title {
+      font-weight: 400;
+      margin-top: 10px;
+      margin-left: 10px;
+      display: flex;
+      justify-content: space-between; }
+  .listContainer .taskList {
+    height: auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(245, 222, 179, 0.5); }
+    .listContainer .taskList .footer {
+      padding: 5px; }
+      .listContainer .taskList .footer:hover {
+        background-color: rgba(245, 222, 179, 0.8); }
+  .listContainer .listBox {
+    width: 272px;
+    background: wheat;
+    background-color: rgba(1, 1, 1, 0.3);
+    border-radius: 5px;
+    padding: 7px; }
+    .listContainer .listBox:hover {
+      background-color: rgba(1, 1, 1, 0.4); }
+    .listContainer .listBox.listAdd {
+      background: transparent;
+      padding: 0;
+      border-radius: 0; }
+  .listContainer .addBox {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 3px;
+    width: 100%; }
+    .listContainer .addBox .addInput {
+      width: 100%; }
+
+
+/*# sourceMappingURL=/src.e31bb0bc.css.map */

@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  height: 100vh;
+  margin: 0; }
+
+.main {
+  background-image: url("/bg.8616d336.jpg");
+  background-position: center;
+  background-size: cover;
+  display: flex; }
+
+.listContainer {
+  margin-top: 15px;
+  margin-left: 5px;
+  background: wheat;
+  background-color: rgba(1, 1, 1, 0.3);
+  width: 272px;
+  border-radius: 5px;
+  height: 5%; }
+
+.listBox {
+  height: 5%; }
+
+.addButton {
+  margin: 7px 5px; }
+
+
+/*# sourceMappingURL=/trellapp.e31bb0bc.css.map */

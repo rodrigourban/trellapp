@@ -1,53 +1,74 @@
 import * as action from './actionTypes'
 import axios from 'axios'
+import { config } from '../../Constants'
 
-
-export const swapList = (firstID, secondID) => {
-  return dispatch => {
-
+export const swapList = (boardID, firstID, secondID) => {
+  return {
+    type: action.SWAP_LIST,
+    firstID: firstID,
+    secondID: secondID
   }
 }
 
-export const swapTask = (boardID, tasklistID, firstID, secondID = null) => {
-  return dispatch => {
-    console.log(boardID, tasklistID, firstID, secondID)
-    axios.post('http://localhost:8000/api/tasks/reorder', { firstID: firstID, secondID: secondID, tasklistID: tasklistID })
-      .then(res => {
-        console.log(res)
-        dispatch(getLists(boardID))
-      })
-      .catch(err => {
-        console.log(err)
-        dispatch(getLists(boardID))
-      })
+
+export const swapTask = (boardID, firstID, secondID, sourceList, destinyList, tasklistID) => {
+  return {
+    type: action.SWAP_TASK,
+    firstID: firstID,
+    secondID: secondID,
+    sourceList: sourceList,
+    destinyList: destinyList,
+    tasklistID: tasklistID
   }
 }
 
 
 export const getBoards = () => {
+  return dispatch => {
+    axios.get(`${config.url.API_URL}/api/boards/`)
+      .then(res => {
+        dispatch(getBoardsSuccess(res.data))
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+}
+
+export const getBoardsSuccess = (payload) => {
   return {
-    type: action.GET_BOARDS
+    type: action.GET_BOARDS_SUCCESS,
+    payload: payload,
   }
 }
 
 export const createBoard = (payload, id = null) => {
-  return {
-    type: action.CREATE_BOARD,
-    payload: payload,
-    boardID: id
+  return dispatch => {
+    axios.post(`${config.url.API_URL}/api/boards/`, payload)
+      .then(res => {
+        dispatch(getBoards())
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 
 export const deleteBoard = (id) => {
-  return {
-    type: action.DELETE_BOARD,
-    boardID: id
+  return dispatch => {
+    axios.delete(`${config.url.API_URL}/api/boards/${id}`)
+      .then(res => {
+        dispatch(getBoards())
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 
 export const getLists = (id) => {
   return dispatch => {
-    axios.get(`http://localhost:8000/api/tasklists/${id}`)
+    axios.get(`${config.url.API_URL}/api/tasklists/${id}`)
       .then(res => {
         dispatch(getListsSuccess(res.data))
       })
@@ -66,24 +87,21 @@ export const getListsSuccess = (lists) => {
 
 export const deleteList = (boardID, listID) => {
   return dispatch => {
-    axios.delete(`http://localhost:8000/api/tasklists/${listID}`)
+    axios.delete(`${config.url.API_URL}/api/tasklists/${listID}`)
       .then(res => {
         dispatch(getLists(boardID))
       })
       .catch(err => {
         dispatch(getLists(boardID))
       })
-    return state
   }
 }
 
 export const createTask = (boardID, listID, payload, taskID = null) => {
   return dispatch => {
-    console.log(boardID, taskID, payload, listID)
     if (taskID) {
-      axios.put(`http://localhost:8000/api/tasks/${taskID}`, payload)
+      axios.put(`${config.url.API_URL}/api/tasks/${taskID}`, payload)
         .then(res => {
-          console.log(res)
           dispatch(getLists(boardID))
         })
         .catch(err => {
@@ -91,9 +109,8 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
           dispatch(getLists(boardID))
         })
     } else {
-      axios.post('http://localhost:8000/api/tasks/', { title: payload, task_list: listID })
+      axios.post(`${config.url.API_URL}/api/tasks/`, { title: payload, task_list: listID })
         .then(res => {
-          console.log(res)
           dispatch(getLists(boardID))
         })
         .catch(err => {
@@ -106,9 +123,8 @@ export const createTask = (boardID, listID, payload, taskID = null) => {
 
 export const deleteTask = (boardID, taskID) => {
   return dispatch => {
-    axios.delete(`http://localhost:8000/api/tasks/${taskID}`)
+    axios.delete(`${config.url.API_URL}/api/tasks/${taskID}`)
       .then(res => {
-        console.log(res)
         dispatch(getLists(boardID))
       })
       .catch(err => {
@@ -121,13 +137,13 @@ export const deleteTask = (boardID, taskID) => {
 export const createList = (boardID, payload, listID = null) => {
   return dispatch => {
     if (listID) {
-      axios.put(`http://localhost:8000/api/tasklists/${listID}`, payload)
+      axios.put(`${config.url.API_URL}/api/tasklists/${listID}`, payload)
         .then(res => {
           dispatch(getLists(boardID))
         })
         .catch(err => console.log(err))
     } else {
-      axios.post('http://localhost:8000/api/tasklists/', { title: payload, board: boardID })
+      axios.post(`${config.url.API_URL}/api/tasklists/`, { title: payload, board: boardID })
         .then(res => {
           dispatch(getLists(boardID))
         })

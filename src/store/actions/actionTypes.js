@@ -1,6 +1,7 @@
 export const CREATE_BOARD = 'CREATE_BOARD'
 export const DELETE_BOARD = 'DELETE_BOARD'
 export const GET_BOARDS = 'GET_BOARDS'
+export const GET_BOARDS_SUCCESS = 'GET_BOARDS'
 
 export const CREATE_LIST = 'CREATE_LIST'
 export const GET_LISTS_SUCESS = 'GET_LISTS_SUCESS'
